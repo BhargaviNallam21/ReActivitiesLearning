@@ -1,0 +1,27 @@
+{
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.defaultFormatter": "ms-dotnettools.csharp",
+  "editor.trimTrailingWhitespace": "always",
+  "editor.deleteFinalNewlines": "always",
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": "always",
+  "omnisharp.enableEditorConfigSupport": true,
+  "omnisharp.formatOnSave": true,
+  "omnisharp.removeUnusedUsings": true,
+  "omnisharp.solveOnSave": "always",
+  "csharp.format.enable": true,
+  "csharp.format.insertFinalNewLine": true,
+  "csharp.format.removeEmptyInsideMethods": true,
+  "dotnet.format.useTabs": false,
+  "dotnet.format.insertFinalNewLine": true,
+  "dotnet.format.trimTrailingWhitespace": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "always",
+    "source.fixAll": "always"
+  },
+  "[csharp]": {
+    "editor.defaultFormatter": "ms-dotnettools.csharp"
+  }
+}
