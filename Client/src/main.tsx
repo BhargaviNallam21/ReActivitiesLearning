@@ -4,8 +4,8 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import App from './App.tsx';
-import './index.css';
+import App from './App/layout/App.tsx';
+import './App/layout/styles.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
