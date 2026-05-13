@@ -1,9 +1,9 @@
-import { Box, AppBar, Toolbar, Typography, Button, Container, MenuItem } from '@mui/material';
+import { Box, AppBar, Toolbar, Typography, Container, MenuItem, MenuList } from '@mui/material';
 import { Group } from '@mui/icons-material';
-type Props = {
-  openForm: () => void;
-};
-export default function Navbar({ openForm }: Props) {
+import { NavLink } from 'react-router';
+import MenuItemLink from '../shared/components/MenuItemLink';
+
+export default function Navbar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
@@ -12,21 +12,22 @@ export default function Navbar({ openForm }: Props) {
       >
         <Container maxWidth="xl">
           <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <Group fontSize="large" />
-              <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
-                ReActivities
-              </Typography>
-            </Box>
+            <MenuList sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <MenuItem component={NavLink} to="/" sx={{ color: 'white' }}>
+                <Group fontSize="large" />
+                <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+                  ReActivities
+                </Typography>
+              </MenuItem>
+            </MenuList>
 
-            <Box sx={{ display: 'flex', gap: 2 }}>
-              <Button sx={{ color: 'white', fontWeight: 'bold' }}>Activities</Button>
-              <Button sx={{ color: 'white', fontWeight: 'bold' }}>About</Button>
-              <Button sx={{ color: 'white', fontWeight: 'bold' }}>Contact</Button>
-            </Box>
-            <Button size="large" variant="contained" color="warning" onClick={openForm}>
-              Create Activity
-            </Button>
+            <MenuList sx={{ display: 'flex', gap: 2 }}>
+              <MenuItemLink to="/activities">Activities</MenuItemLink>
+              <MenuItemLink to="/createActivity">Create Activity</MenuItemLink>
+            </MenuList>
+            <MenuList sx={{ display: 'flex', gap: 2 }}>
+              <MenuItem>user menu</MenuItem>
+            </MenuList>
           </Toolbar>
         </Container>
       </AppBar>
