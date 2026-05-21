@@ -3,7 +3,7 @@ import App from '../layout/App.tsx';
 import HomePage from '../../features/home/HomePage.tsx';
 import ActivityForm from '../../features/Activities/Forms/ActivityForm.tsx';
 import AppDashboard from '../../features/Activities/Dashboard/AppDashboard.tsx';
-
+import Counter from '../../features/counter/Counter.tsx';
 import ActivityDetailPage from '../../features/Activities/Details/ActivityDetailPage.tsx';
 
 export const routes = createBrowserRouter([
@@ -30,6 +30,10 @@ export const routes = createBrowserRouter([
       {
         path: 'manage/:id',
         element: <ActivityForm />,
+      },
+      {
+        path: 'counter',
+        element: <Counter />,
       },
     ],
   },
