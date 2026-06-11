@@ -41,6 +41,7 @@ export default function Navbar() {
               <MenuItemLink to="/activities">Activities</MenuItemLink>
               <MenuItemLink to="/createActivity">Create Activity</MenuItemLink>
               <MenuItemLink to="/counter">Counter</MenuItemLink>
+              <MenuItemLink to="/test-errors">Errors</MenuItemLink>
             </MenuList>
             <MenuList sx={{ display: 'flex', gap: 2 }}>
               <MenuItem>user menu</MenuItem>
