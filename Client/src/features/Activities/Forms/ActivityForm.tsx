@@ -1,30 +1,62 @@
-import { Paper, Typography, Box, TextField, Button } from '@mui/material';
-import React from 'react';
+import { Paper, Typography, Box, Button } from '@mui/material';
 import { useActivities } from '../../../Lib/hooks/useActivities';
 import { useNavigate, useParams } from 'react-router';
-
+import { useForm } from 'react-hook-form';
+import { act, useEffect } from 'react';
+import { activitySchema, type ActivitySchema } from '../../../Lib/schemas/activitySchema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import TextInput from '../../../App/shared/components/TextInput';
+import SelectInput from '../../../App/shared/components/SelectInput';
+import { categoryOptions } from './CategoryOptions';
+import DateTimeInput from '../../../App/shared/components/DateTimeInput';
+import LocationInput from '../../../App/shared/components/LocationInput';
 export default function ActivityForm() {
+  const { control, reset, handleSubmit } = useForm<ActivitySchema>({
+    mode: 'onTouched',
+    resolver: zodResolver(activitySchema),
+  });
+  const navigate = useNavigate();
   const { id } = useParams();
   const { updateActivity, createActivity, activity, isLoadingActivity } = useActivities(id);
-  const navigate = useNavigate();
-
-  const handleSubmit = async (event: React.SyntheticEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const data: { [key: string]: FormDataEntryValue } = {};
-    formData.forEach((value, key) => {
-      data[key] = value;
-    });
+  useEffect(() => {
     if (activity) {
-      data.id = activity.id;
-      await updateActivity.mutateAsync(data as unknown as Activity);
-      navigate(`/activities/${activity.id}`);
-    } else {
-      createActivity.mutate(data as unknown as Activity, {
-        onSuccess: (id) => {
-          navigate(`/activities/${id}`);
+      reset({
+        ...activity,
+        location: {
+          city: activity.city,
+          venue: activity.venue,
+          latitude: activity.latitude,
+          longitude: activity.longitude,
         },
       });
+    }
+  }, [activity, reset]);
+
+  const onSubmit = async (data: ActivitySchema) => {
+    const { location, ...rest } = data;
+    const flattenedData = {
+      ...rest,
+      ...location,
+    };
+    try {
+      if (activity) {
+        await updateActivity.mutateAsync(
+          { ...activity, ...flattenedData },
+          {
+            onSuccess: () => {
+              navigate(`/activities/${activity.id}`);
+            },
+          }
+        );
+      } else {
+        await createActivity.mutateAsync(flattenedData, {
+          onSuccess: (id) => {
+            navigate(`/activities/${id}`);
+          },
+        });
+      }
+    } catch (error) {
+      console.error('Error submitting activity:', error);
     }
   };
   if (isLoadingActivity) {
@@ -42,42 +74,16 @@ export default function ActivityForm() {
           flexDirection: 'column',
           gap: 3,
         }}
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
       >
-        <TextField name="title" label="Title" defaultValue={activity?.title} fullWidth />
+        <TextInput label="Title" control={control} name="title" />
 
-        <TextField
-          name="description"
-          label="Description"
-          multiline
-          rows={3}
-          defaultValue={activity?.description}
-          fullWidth
-        />
-
-        <TextField name="category" label="Category" defaultValue={activity?.category} fullWidth />
-
-        <TextField
-          name="date"
-          label="Date"
-          type="date"
-          slotProps={{
-            inputLabel: {
-              shrink: true,
-            },
-          }}
-          defaultValue={
-            activity?.date
-              ? new Date(activity.date).toISOString().split('T')[0]
-              : new Date().toISOString().split('T')[0]
-          }
-          fullWidth
-        />
-
-        <TextField name="city" label="City" defaultValue={activity?.city} fullWidth />
-
-        <TextField name="venue" label="Venue" defaultValue={activity?.venue} fullWidth />
-
+        <TextInput control={control} label="Description" name="description" multiline rows={3} />
+        <Box sx={{ display: 'flex', gap: 3 }}>
+          <SelectInput control={control} label="Category" name="category" items={categoryOptions} />
+          <DateTimeInput control={control} label="Date" name="date" />
+        </Box>
+        <LocationInput control={control} label="Enter the location" name="location" />
         <Box
           sx={{
             display: 'flex',
